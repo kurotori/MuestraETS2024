@@ -61,7 +61,7 @@ class PartidaController extends Controller
 
         $validacion=$solicitud->validate(
             [
-                'juego'=>'nullable|in:MEGAMANIA, DRAGONFIRE,ICECLIMBER,GALAGA,retorno',
+                'juego'=>'nullable|in:MEGAMANIA,DRAGONFIRE,ICECLIMBER,GALAGA,retorno',
                 //'puntaje'=>'required|integer|min:0',
                 //'estado'=>'nullable|in:abierta,jugando,cerrada',
                 'jugadorId'=>'required|max:7'
@@ -179,6 +179,10 @@ class PartidaController extends Controller
         $partida = Partida::where('codigo',$id)->where('estado','abierta')->first();
         //var_dump($partida->isEmpty());
         if ($partida) {
+
+            $top3 = Partida::where('juego',$partida->juego)
+                ->orderBy('puntaje','desc')
+                ->limit(3);
             // Return the item as JSON response
             return response()->json([
                 "estado"=>"OK",
@@ -194,22 +198,59 @@ class PartidaController extends Controller
 
     }
 
+    /**
+     * Permite buscar una partida en el sistema
+     */
+    public function buscarPartida(Request $solicitud){
+
+
+        $id=$solicitud->partidaId;
+        if (strlen($id) >4 || strlen($id) < 4) {
+            return response()->
+            json(
+                [
+                    'estado'=>'ERROR',
+                    'mensaje' => 'Identificador de jugador no válido'
+                ],
+                400
+            );
+        }
+
+        $partida = Partida::where('codigo',$id)->with('jugador')->first();
+
+        if ($partida) {
+
+            $top3 = Partida::where('juego',$partida->juego)
+                ->where('estado','cerrada')
+                ->orderBy('puntaje','desc')
+                ->limit(3)->get();
+
+            /*if ( array_search($partida,$top3,true) ) {
+                $esTop = true;
+            }
+            else{
+                $esTop = false;
+            }*/
+
+            // Return the item as JSON response
+            return response()->json([
+                "estado"=>"OK",
+                "partida"=>$partida,
+                "top3"=>$top3->find($partida) //$esTop
+            ]);
+        } else {
+            // Return a not found response
+            return response()->json([
+                'estado'=> 'ERROR',
+                'mensaje'=>'Partida No Encontrada'
+            ]);
+        }
+
+    }
+
     public function finalizarPartida(Request $solicitud){
 
-        /*$validacion=$solicitud->validate(
-            [
-                'partidaId'=>'required|max:4|min:4',
-                //'puntaje'=>'required|integer|min:0',
-                //'estado'=>'nullable|in:abierta,jugando,cerrada',
-                'jugadorId'=>'required|max:7'
-            ]
-        );
 
-
-        $partidaId=$validacion['partidaId'];
-        $jugadorId=$validacion['jugadorId'];
-        substr($jugadorID,3)
-        */
         $jugadorId = substr($solicitud->jugadorId,3);
         $partidaId = $solicitud->partidaId;
         $puntaje = $solicitud->puntaje;
@@ -224,6 +265,10 @@ class PartidaController extends Controller
             $partida->puntaje = $puntaje;
 
             $partida->save();
+
+            $top3 = Partida::where('juego',$partida->juego)
+                ->orderBy('puntaje','desc')
+                ->limit(3);
 
             return response()->json(
                 [
@@ -242,20 +287,7 @@ class PartidaController extends Controller
 
     public function iniciarPartida(Request $solicitud){
 
-        /*$validacion=$solicitud->validate(
-            [
-                'partidaId'=>'required|max:4|min:4',
-                //'puntaje'=>'required|integer|min:0',
-                //'estado'=>'nullable|in:abierta,jugando,cerrada',
-                'jugadorId'=>'required|max:7'
-            ]
-        );
 
-
-        $partidaId=$validacion['partidaId'];
-        $jugadorId=$validacion['jugadorId'];
-        substr($jugadorID,3)
-        */
         $jugadorId = substr($solicitud->jugadorId,3);
         $partidaId = $solicitud->partidaId;
         //return response()->json(["partida"=>"$partidaId","jugador"=>"$jugadorId"]);

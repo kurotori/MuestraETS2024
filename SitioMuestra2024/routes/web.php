@@ -50,6 +50,7 @@ Route::post('/partida/nueva',
     [PartidaController::class,'crear']
 );
 
+
 Route::get('/partida/iniciar/{partidaId}/{jugadorId}',
     [PartidaController::class,'iniciarPartida']
 );
@@ -60,6 +61,10 @@ Route::get('/partida/finalizar/{partidaId}/{jugadorId}/{puntaje}',
 
 Route::get('/partida/ver/{partidaId}',
     [PartidaController::class,'verPartida']
+);
+
+Route::get('/partida/buscar/{partidaId}',
+    [PartidaController::class,'buscarPartida']
 );
 
 

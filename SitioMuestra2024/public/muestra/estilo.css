@@ -15,6 +15,12 @@
     overflow: hidden;
 }
 
+#resultadoR h2{
+    text-align: center;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 .abierto{
     height: 100%;
 }
@@ -37,6 +43,9 @@ span.error{
 }
 
 .spanId{
+    position: absolute;
+    right: 10px;
+    left: auto;
     padding-left: 10px;
     padding-right: 10px;
     color: white;

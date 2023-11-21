@@ -198,8 +198,22 @@ document.getElementById('formRegreso').addEventListener('submit', function (even
 })
 
 
-async function crearPartida() {
-    jugadorId=spanIdJugadorR.innerText
+async function crearPartida(modo) {
+    let datosJugador={}
+    if (modo=="1") {
+        datosJugador={
+            'jugadorId':spanIdJugadorR.innerText,
+            'juego':spanUltimoJuego.innerText
+        }
+    }
+    else{
+        datosJugador={
+            'jugadorId':spanIdJugadorR.innerText,
+        }
+    }
+
+
+    //jugadorId=spanIdJugadorR.innerText
     const instAxios = axios.create(
         {
             withCredentials:true,
@@ -210,9 +224,7 @@ async function crearPartida() {
     instAxios.get('../sanctum/csrf-cookie')
     .then(
         function () {
-            let datosJugador={
-                'jugadorId':jugadorId
-            }
+
             instAxios.post(
                 '../partida/nueva',
                 datosJugador,
@@ -228,7 +240,7 @@ async function crearPartida() {
                     divMostrar(divResultadoR)
                     divCerrar(divDatosJugador)
                     spanIdPartidaR.innerText=response.data.partida.codigo
-                    spanIdJugadorRF.innerText=jugadorId
+                    spanIdJugadorRF.innerText=datosJugador.jugadorId
                 }
             )
         }

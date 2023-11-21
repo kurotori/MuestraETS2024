@@ -2,6 +2,9 @@
 titulo="Sistema de Torneo de VideoJuegos"
 version="1"
 
+respaldoHOME="$HOME"
+HOME="../Retroarch/RetroArch-Linux-x86_64.AppImage.home"
+
 # Archivo JSON
 json_file="puntajes.json"
 log_file="resultado.log"
@@ -145,7 +148,9 @@ function get_user_data {
                 apodoJugador=$(extraerDato "jugador.apodo" "$respuesta")
 
                 idPartida=$(get_input "¡Hola $nombreJugador $apellidoJugador!.\n Ingresa la ID de tu partida")
+                idPartida=$(echo "$idPartida" | tr '[:lower:]' '[:upper:]')
                 respuesta=$(enviarAServidorGET "partida/ver/$idPartida")
+                
                 estado=$(extraerDato "estado" "$respuesta")
 
                 if [[ "$estado" == "OK" ]]; then
@@ -160,7 +165,7 @@ function get_user_data {
 
                         "MEGAMANIA")
                             jugar="$retroarch$cores$atari$megamania"
-                            pausa=5
+                            pausa=2
                             ;;
                         "GALAGA")
                             jugar="$retroarch$cores$nes$galaga"
@@ -189,7 +194,7 @@ function get_user_data {
 
                             echo "$LINEA" | grep -q "Submitting"
                             if [ $? -eq 0 ]; then
-                                #echo "Encontré: $LINEA"
+                                echo "Encontré: $LINEA"
                                 puntos=$(echo "$LINEA"|cut -d" " -f4) #Extracción de puntos
                                 echo "$puntos">puntos.txt
                                 #echo "Puntos: $puntos"
@@ -236,3 +241,6 @@ function get_user_data {
 }
 
 get_user_data
+
+
+HOME="$respaldoHOME"
