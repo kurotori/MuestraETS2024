@@ -36,8 +36,12 @@ function quitarJuego {
             n_juegos+=("$elemento")
         fi
     done
-    juegos=("${n_juegos[@]}")
-    echo "${juegos[@]}"
+
+    if [ "${#juegos[@]}" -lt 1 ]; then
+        juegos=("${jugados[@]}")
+    else
+         juegos=("${n_juegos[@]}")
+    fi
 }
 
 # Función para obtener datos del usuario
@@ -76,6 +80,8 @@ function get_user_data {
                 jugar="$retroarch$cores$atari$dragonfire"
                 pausa=5
         esac
+
+        dialog --msgbox "Hola, $nombre. Vas a jugar $juego" 6 40
 
 
         $jugar &
@@ -116,7 +122,7 @@ function get_user_data {
         else
             apodo=$(echo "$apodo"|tr '[:lower:]' '[:upper:]')
         fi
-        echo "$apodo"
+       
         # Crear un objeto JSON
         new_entry=$(jq -n --arg nombre "$nombre" \
                         --arg apellido "$apellido" \
@@ -131,9 +137,8 @@ function get_user_data {
         jq ". += [$new_entry]" "$json_file" > temp_json.json
 
         mv temp_json.json "$json_file"
-
+        
         dialog --msgbox "Registro agregado correctamente!" 6 40
-
 
     done
 
