@@ -1,0 +1,62 @@
+.nav-tabs .nav-link.active{
+    color: black !important;
+}
+
+.nav-tabs .nav-link{
+    color: grey !important;
+}
+
+.colapsable{
+    transition: all 100ms;
+}
+
+.resultado{
+    height: 50px;
+}
+
+.abierto{
+    height: 100%;
+}
+
+.cerrado{
+    height: 0px;
+}
+
+.telon{
+    position: absolute;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: all 500ms;
+}
+
+span.error{
+    color: red;
+    font-size: small;
+    font-weight: bold;
+}
+
+.spanId{
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+#formRegistro{
+    overflow: hidden;
+    transition: all 500ms;
+}
+
+#idJugador{
+    background-color: blue;
+}
+
+#idPartida{
+    background-color: red;
+}
+
+#resultadoJyP{
+    overflow: hidden;
+    text-align: center;
+}

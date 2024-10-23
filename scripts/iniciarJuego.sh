@@ -3,6 +3,14 @@
 json_file="puntajes.json"
 log_file="resultado.log"
 
+# pwd
+
+# SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# echo "$SCRIPTPATH"
+
+# sleep 30s
+
+
 touch "$json_file"
 
 retroarch="../../Retroarch/RetroArch-Linux-x86_64.AppImage -f --verbose --log-file=$log_file -L "
