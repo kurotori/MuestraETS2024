@@ -1,15 +1,49 @@
 #!/bin/bash
+titulo="Sistema de Torneo de VideoJuegos"
+version="1"
+
 # Archivo JSON
 json_file="puntajes.json"
 log_file="resultado.log"
+ip_servidor=""
 
 # pwd
 
 # SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 # echo "$SCRIPTPATH"
 
-# sleep 30s
+# 
 
+ip_servidor=$(dialog --backtitle "$titulo v$version" --title "Configurar Sistema" --inputbox "Ingresa el IP del Servidor" 8 40 --output-fd 1)
+intentos=1
+
+while (( intentos < 6 )); do
+    dialog --backtitle "$titulo v$version" --infobox "Conectándose al servidor $ip_servidor \nIntento $intentos de 5" 8 40
+    respuesta=$(curl -s --max-time 5 "$ip_servidor:8000/estado")
+
+    if [[ -n "$respuesta" ]]; then
+        NombreServidor=$(echo "$respuesta"|jq -r '.servidor')
+        NombreTorneo=$(echo "$respuesta"|jq -r '.torneo')
+        dialog --backtitle "$titulo v$version" --title "¡¡Conexión Exitosa!!" --msgbox "Conectado al servidor: $NombreServidor" 8 60
+        break
+    else
+        dialog --backtitle "$titulo v$version" --title "ERROR DE CONEXIÓN" --infobox "No se pudo obtener respuesta del servidor $ip_servidor.\nIntento $intentos de 5\nEsperando 3 segundos para reintentar" 8 40
+        ((intentos++))
+        sleep 3s
+    fi
+
+done
+
+if (( intentos == 6 )); then
+    dialog --backtitle "$titulo v$version" --title "ERROR DE CONEXIÓN" --infobox "No se pudo obtener una respuesta del servidor $ip_servidor después de 5 intentos." 8 40
+    sleep 5s
+    bash "$0"
+fi
+
+
+#echo "$respuesta"
+
+#sleep 30s
 
 touch "$json_file"
 
@@ -28,9 +62,45 @@ jugados=()
 # Función para capturar entrada con dialog
 function get_input {
     local input
-    input=$(dialog --inputbox "$1" 8 40 --output-fd 1)
+    input=$(dialog --backtitle "$NombreTorneo" --inputbox "$1" 8 40 --output-fd 1)
     echo "$input"
 }
+
+function mostrarAviso {
+    mensaje="$1"
+    titulo="$2"
+    tiempo="$3"
+    dialog --backtitle "$NombreTorneo" --title "$titulo" --infobox "$mensaje" 8 40
+    sleep "$tiempo"
+}
+
+function extraerDato {
+    clave="$1"
+    respuesta="$2"
+    dato=$(echo "$respuesta"|jq -r ".$clave")
+    echo "$dato"
+}
+
+
+function enviarAServidorGET {
+    ruta="$1"
+    datos="$2"
+    header_content="Content-Type: application/json"
+
+    respuesta=$(curl -s -X GET -H "$header_content" -d "$datos" --max-time 5 "$ip_servidor:8000/$ruta")
+    echo "$respuesta"
+}
+
+function enviarAServidorPOST {
+    ruta="$1"
+    datos="$2"
+    header_content="Content-Type: application/json"
+
+    respuesta=$(curl -s -X GET -H "$header_content" -d "$datos" --max-time 5 "$ip_servidor:8000/$ruta")
+    echo "$respuesta"
+}
+
+
 
 #Argumentos
 function quitarJuego {
@@ -59,7 +129,35 @@ function get_user_data {
         rm -r "$log_file"
         touch "$log_file"
             # Solicitar cada campo del nuevo registro
-        nombre=$(get_input "¿Cuál es tu nombre?")
+        idJugador=$(get_input "Hola. Ingresa tu ID")
+        
+        respuesta=$(enviarAServidorGET "jugador/ver/$idJugador")
+        estado=$(extraerDato "estado" "$respuesta")
+        if [[ "$estado" == "OK" ]]; then
+            nombreJugador=$(extraerDato "jugador.nombre" "$respuesta")
+            apellidoJugador=$(extraerDato "jugador.apellido" "$respuesta")
+            idNumJugador=$(extraerDato "jugador.id" "$respuesta")
+            apodoJugador=$(extraerDato "jugador.apodo" "$respuesta")
+
+            idPartida=$(get_input "¡Hola $nombreJugador $apellidoJugador!.\n Ingresa la ID de tu partida")
+            respuesta=$(enviarAServidorGET "partida/ver/$idPartida")
+            estado=$(extraerDato "estado" "$respuesta")
+
+            if [[ "$estado" == "OK" ]]; then
+                juego=$(extraerDato "partida[0].juego" "$respuesta")
+
+                dialog --backtitle "$NombreTorneo" --title "Comenzando Juego" --pause "Tu juego comienza en 5 segundos" 8 40 5
+            else
+                mostrarAviso "Esa no es una ID de Partida válida.\nPrueba nuevamente" "ERROR" 5
+            fi
+
+        else
+            mostrarAviso "Esa ID no esta registrada.\nPrueba nuevamente" "ERROR" 5
+        fi
+        
+        sleep 30s
+        
+        
         apellido=$(get_input "¿Y tu apellido?")
 
         #Se selecciona un juego al azar
@@ -105,7 +203,7 @@ function get_user_data {
 
                 echo "$LINEA" | grep -q "Submitting"
                 if [ $? -eq 0 ]; then
-                    echo "Encontré: $LINEA"
+                    #echo "Encontré: $LINEA"
                     puntos=$(echo "$LINEA"|cut -d" " -f4) #Extracción de puntos
                     echo "$puntos">puntos.txt
                     echo "Puntos: $puntos"

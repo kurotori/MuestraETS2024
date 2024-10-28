@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Partida extends Model
 {
     //
     protected $table="partidas";
     protected $primaryKey="id";
+
 
     protected $fillable=[
         'codigo',
@@ -18,8 +20,9 @@ class Partida extends Model
         'jugadorId'
     ];
 
-    public function jugador(){
-        return $this->belongsTo(Jugador::class);
+    public function jugador():BelongsTo
+    {
+        return $this->belongsTo(Jugador::class,'jugadorId');
     }
 
 

@@ -26,8 +26,10 @@
         datos[key] = value;
     });
 
-
-    axios.post(
+    axios.get('../sanctum/csrf-cookie')
+    .then(
+        function () {
+            axios.post(
         '../prueba',
         datos,
         {
@@ -43,7 +45,10 @@
         .catch(function(error) {
             console.error('Error al enviar los datos:', error);
             // Manejo de los errores
-        });
+        })
+        }
+    )
+
 })
 </script>
 </html>

@@ -56,7 +56,7 @@
 
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+                                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
                             </form>
                         </div>
                     </div>
@@ -67,14 +67,21 @@
                             <h2>Registro Completo</h2>
                             <h3>ID del Jugador: <span class="spanId" id="idJugador"></span></h3>
                             <h3>ID de la Partida: <span class="spanId" id="idPartida"></span></h3>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <br>
                             <a
                                 name=""
                                 id="btnReiniciar"
-                                class="btn btn-primary"
+                                class="btn btn-secondary btn-block"
                                 href="#"
                                 role="button"
                                 onclick="reiniciar()"
-                                >Reiniciar</a
+                                >Reiniciar el Formulario</a
                             >
                         </div>
 
@@ -98,6 +105,55 @@
 
                                 <button type="submit" class="btn btn-primary btn-block">Confirmar Datos</button>
                             </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <br>
+                            <table id="tblDatos">
+                                <tr>
+                                    <th>
+                                        <h3>Datos del Jugador</h3>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td class="tituloDato">Nombre:</td>
+                                    <td class="nombre"></td>
+                                </tr>
+                                <tr>
+                                    <td class="tituloDato">ID:</td>
+                                    <td class="id"></td>
+                                </tr>
+                                <tr>
+                                    <td class="tituloDato">Último Juego:</td>
+                                    <td class="ultimoJuego"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <a
+                                            name=""
+                                            id=""
+                                            class="btn btn-rojo"
+                                            href="#"
+                                            role="button"
+                                            onclick=""
+                                            >Crear Partida con EL MISMO JUEGO</a
+                                        >
+
+                                    </td>
+                                    <td colspan="2">
+                                        <a
+                                            name=""
+                                            id=""
+                                            class="btn btn-verde"
+                                            href="#"
+                                            role="button"
+                                            >Crear Partida con UN JUEGO AL AZAR</a
+                                        >
+
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>

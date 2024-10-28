@@ -35,6 +35,7 @@ document.getElementById('formRegistro').addEventListener('submit',function(event
             }
             else{
                 spanFormRegError.innerText="Los campos con * son obligatorios"
+                habilitado=false
             }
         }
         else{
@@ -57,25 +58,25 @@ document.getElementById('formRegistro').addEventListener('submit',function(event
             }
         )
         instAxios.get('../sanctum/csrf-cookie')
-        .then(
-            instAxios.post(
-                '../jugador/nuevo',
-                datos,
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
+        .then(function () {
+                instAxios.post(
+                    '../jugador/nuevo',
+                    datos,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     }
-                }
-            )
+                )
                 .then(function(response) {
                     //alert("Jugador Creado")
                     console.log('Respuesta:', response.data);
                     divCerrar(divTelonFormRegistro)
-                    spanIdJugador.innerText=response.data.jugador
+                    spanIdJugador.innerText=response.data.jugadorId
 
                     if (response.data.estado="OK") {
                         let datosJugador={
-                            'jugadorId':response.data.jugador
+                            'jugadorId':response.data.jugadorId
                         }
                         instAxios.post(
                             '../partida/nueva',
@@ -103,6 +104,8 @@ document.getElementById('formRegistro').addEventListener('submit',function(event
                     console.error('Error al enviar los datos:', error);
                     // Manejo de los errores
                 })
+            }
+
         )
 
 
@@ -110,9 +113,14 @@ document.getElementById('formRegistro').addEventListener('submit',function(event
 
 })
 
+function crearPartida() {
+
+}
+
 function reiniciar() {
     divCerrar(divResultado)
     divMostrar(document.getElementById('formRegistro'))
+    spanFormRegError.innerText=""
     document.getElementById('formRegistro').querySelectorAll('input').forEach(element => {
         element.value=""
     });

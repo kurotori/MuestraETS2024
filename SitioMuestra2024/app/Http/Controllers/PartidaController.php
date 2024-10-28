@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Jugador;
 use App\Models\Partida;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
-use stdClass;
+use Illuminate\Support\Facades\DB;
 
 class PartidaController extends Controller
 {
@@ -14,11 +15,41 @@ class PartidaController extends Controller
      */
     public function index()
     {
-        $partidas=Partida::all();
+        $partidas=Partida::with('jugador')->get();//all();
         return response()->json([
             'mensaje'=>'OK',
             'partidas'=>$partidas
         ]);
+    }
+
+    public function puntajes()
+    {
+        /*
+        $partidas=Partida::with('jugador')->where('estado','cerrada')->get();
+
+        $puntajes = $partidas->map(
+            function($partida){
+                return collect($partida->toArray())
+                ->only(['id','puntaje','jugador']);
+            }
+        );
+        */
+        $puntajes = DB::table('partidas')
+                        ->select('juego','puntaje')
+                        ->selectSub(
+                            function($consulta){
+                                $consulta->from('jugadores')
+                                ->select('apodo')
+                                ->whereColumn('jugadores.id','partidas.jugadorId');
+                            }
+                        ,'apodo')->get();
+
+
+        return response()->json([
+            'mensaje'=>'OK',
+            'puntajes'=>$puntajes
+        ]);
+
     }
 
     /**
@@ -29,7 +60,7 @@ class PartidaController extends Controller
 
         $validacion=$solicitud->validate(
             [
-                //'juego'=>'required|in:MEGAMANIA, DRAGONFIRE,ICECLIMBER,GALAGA',
+                'juego'=>'nullable|in:MEGAMANIA, DRAGONFIRE,ICECLIMBER,GALAGA',
                 //'puntaje'=>'required|integer|min:0',
                 //'estado'=>'nullable|in:abierta,jugando,cerrada',
                 'jugadorId'=>'required|max:7'
@@ -37,18 +68,20 @@ class PartidaController extends Controller
         );
 
         $jugadorID = $validacion['jugadorId'];
+
         $id=substr($jugadorID,3);
         $apodo=substr($jugadorID,0,3);
 
         $jugador=Jugador::where('id',$id)->where('apodo',$apodo)->first();
 
         if ($jugador) {
-            $juego=$this->elegirJuego();
-            $codigo=$this->crearCodigo();
 
+            if (! isset($validacion['juego'])) {
+                $validacion['juego'] = $this->elegirJuego();
+            }
+
+            $validacion['codigo']=$this->crearCodigo();
             $validacion['jugadorId'] = $id;
-            $validacion['codigo']=$codigo;
-            $validacion['juego']=$juego;
 
             $partida = Partida::create($validacion);
 
@@ -72,7 +105,7 @@ class PartidaController extends Controller
      * Genera un código único para la partida
      */
     private function crearCodigo(){
-        $hexChars = '0123456789abcdef';
+        $hexChars = '0123456789ABCDEF';
 
         $resultado = '';
         $valido = false;
@@ -120,6 +153,50 @@ class PartidaController extends Controller
         } else {
             return $juegos[rand(0,3)];
         }
+
+    }
+
+    public function verPartida(Request $solicitud){
+        /*$validacion=$solicitud->validate(
+            [
+                'partidaId'=>'required|max:4'
+            ]
+        );*/
+
+        $id=$solicitud->partidaId;
+        if (strlen($id) >4 || strlen($id) >4) {
+            return response()->
+            json(
+                [
+                    'estado'=>'ERROR',
+                    'mensaje' => 'Identificador de jugador no válido'
+                ],
+                400
+            );
+        }
+
+
+
+
+        $partida = Partida::where('codigo',$id)->where('estado','abierta')->get();
+        //var_dump($partida->isEmpty());
+        if ($partida->isNotEmpty()) {
+            // Return the item as JSON response
+            return response()->json([
+                "estado"=>"OK",
+                "partida"=>$partida
+            ]);
+        } else {
+            // Return a not found response
+            return response()->json([
+                'estado'=> 'ERROR',
+                'mensaje'=>'Partida No Encontrada'
+            ]);
+        }
+
+    }
+
+    public function iniciarPartida(Request $solicitud){
 
     }
 

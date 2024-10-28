@@ -48,7 +48,7 @@ span.error{
     transition: all 500ms;
 }
 
-#idJugador{
+span#idJugador{
     background-color: blue;
 }
 
@@ -59,4 +59,49 @@ span.error{
 #resultadoJyP{
     overflow: hidden;
     text-align: center;
+}
+
+#tblDatos{
+    width: 100%;
+}
+
+.btn-rojo{
+    background-color: rgb(252, 61, 61) !important;
+    color: white !important;
+}
+
+.btn-rojo:hover{
+    background-color: rgb(255, 84, 84) !important;
+}
+
+.btn-rojo:active{
+    background-color: rgb(249, 35, 35) !important;
+}
+
+
+.btn-verde{
+    background-color: rgb(61, 252, 61) !important;
+    color: black !important;
+}
+
+.btn-verde:hover{
+    background-color: rgb(84, 255, 84) !important;
+}
+
+.btn-verde:active{
+    background-color: rgb(35, 249, 35) !important;
+}
+
+
+.tituloDato{
+    font-weight: bold;
+}
+
+#tblDatos tr th{
+    text-align: center;
+    font-weight: bold;
+}
+
+#tblDatos .btn{
+    width: 100%;
 }

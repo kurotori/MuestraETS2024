@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jugador;
+use App\Models\Partida;
 use Illuminate\Http\Request;
 
 class JugadorController extends Controller
@@ -36,7 +37,7 @@ class JugadorController extends Controller
         return response()->json([
             'estado'=>'OK',
             'mensaje'=>'Jugador Creado',
-            'jugador'=>$jugador->apodo.$jugador->id
+            'jugadorId'=>$jugador->apodo.$jugador->id
         ]);
     }
 
@@ -46,7 +47,7 @@ class JugadorController extends Controller
     public function verTodos(){
         $jugadores=Jugador::all();
         return response()->json([
-            'mensaje'=>'OK',
+            'estado'=>'OK',
             'jugadores'=>$jugadores
         ]);
     }
@@ -62,7 +63,7 @@ class JugadorController extends Controller
             return response()->
             json(
                 [
-                    'estado'=>'OK',
+                    'estado'=>'ERROR',
                     'mensaje' => 'Identificador de jugador no válido'
                 ],
                 400
@@ -78,7 +79,7 @@ class JugadorController extends Controller
         if ($jugador) {
             // Return the item as JSON response
             return response()->json([
-                "mensaje"=>"OK",
+                "estado"=>"OK",
                 "jugador"=>$jugador
             ]);
         } else {
@@ -89,6 +90,43 @@ class JugadorController extends Controller
             ]);
         }
     }
+
+
+    public function verUltimoJuego(Request $solicitud){
+
+        $jugadorID=$solicitud->jugadorId;
+
+        if (strlen($jugadorID) > 7) {
+            return response()->
+            json(
+                [
+                    'estado'=>'ERROR',
+                    'mensaje' => 'Identificador de jugador no válido'
+                ],
+                400
+            );
+        }
+
+        $jugador = $this->jugadorDeId($jugadorID);
+        $partidas = $jugador->partidasJugadas()->get();
+
+        return response()->json([
+            'estado'=>'OK',
+            'jugador'=>$jugador,
+            'ultimoJuego'=>$partidas
+        ]);
+    }
+
+
+    private function jugadorDeId($id){
+        $jugadorId=substr($id,3);
+        $apodo=substr($id,0,3);
+        //return $id;
+
+        $jugador=Jugador::where('id',$jugadorId)->where('apodo',$apodo)->first();
+        return $jugador;
+    }
+
 
     /**
      * Display the specified resource.
