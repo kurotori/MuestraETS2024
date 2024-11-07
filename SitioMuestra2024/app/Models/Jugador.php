@@ -24,5 +24,4 @@ class Jugador extends Model
         return $this->hasMany(Partida::class,'jugadorId');
     }
 
-
 }

@@ -76,11 +76,16 @@ class JugadorController extends Controller
 
         $jugador=Jugador::where('id',$id)->where('apodo',$apodo)->first();
 
+
         if ($jugador) {
+            $partidas = $jugador->partidasJugadas()->get();
+            $ultimoJuego = Partida::where('jugadorId',$jugador->id)->orderByDesc('id')->first();
             // Return the item as JSON response
             return response()->json([
                 "estado"=>"OK",
-                "jugador"=>$jugador
+                "jugador"=>$jugador,
+                "partidas"=>$partidas,
+                "ultimoJuego"=>$ultimoJuego->juego
             ]);
         } else {
             // Return a not found response

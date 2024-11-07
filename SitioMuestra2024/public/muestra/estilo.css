@@ -12,6 +12,7 @@
 
 .resultado{
     height: 50px;
+    overflow: hidden;
 }
 
 .abierto{
@@ -43,12 +44,16 @@ span.error{
     font-weight: bold;
 }
 
+#idPartidaR{
+    background-color: red;
+}
+
 #formRegistro{
     overflow: hidden;
     transition: all 500ms;
 }
 
-span#idJugador{
+span#idJugador,span#idJugadorRF{
     background-color: blue;
 }
 
@@ -97,11 +102,29 @@ span#idJugador{
     font-weight: bold;
 }
 
+#datosJugador{
+    overflow: hidden;
+}
+
+#tblDatos tr{
+    width: 100%;
+}
+
 #tblDatos tr th{
     text-align: center;
     font-weight: bold;
 }
 
+
+#tblDatos tr td{
+    width: 50%;
+}
+
 #tblDatos .btn{
     width: 100%;
+}
+
+.tituloPag{
+    width: 100%;
+    text-align: center;
 }

@@ -32,7 +32,7 @@ Route::post('/jugador/nuevo',
 );
 
 Route::get('/partidas',
-    [PartidaController::class,'index']
+    [PartidaController::class,'verTodas']
 );
 
 Route::get('/puntajes',
@@ -44,8 +44,17 @@ Route::get('/jugador/ver/{jugadorId}/partidas',
     [JugadorController::]
 );
 */
+
 Route::post('/partida/nueva',
-[PartidaController::class,'crear']
+    [PartidaController::class,'crear']
+);
+
+Route::get('/partida/iniciar/{partidaId}/{jugadorId}',
+    [PartidaController::class,'iniciarPartida']
+);
+
+Route::get('/partida/finalizar/{partidaId}/{jugadorId}/{puntaje}',
+    [PartidaController::class,'finalizarPartida']
 );
 
 Route::get('/partida/ver/{partidaId}',
@@ -56,4 +65,10 @@ Route::get('/partida/ver/{partidaId}',
 Route::post('/prueba',
     //[PartidaController::class,'crear']
     [JugadorController::class,'verUltimoJuego']
+);
+
+Route::post('/probando',
+    function(Request $solicitud){
+        return response()->json(["dato"=>$solicitud->idJugador]);
+    }
 );

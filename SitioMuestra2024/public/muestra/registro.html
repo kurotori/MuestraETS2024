@@ -9,18 +9,18 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
+    <h1 class="tituloPag">Sistema de Registro de Participantes</h1>
     <div class="container mt-5">
         <!-- Nav Tabs -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">
-                    Registro de Jugadores Nuevos
+                    Participantes Nuevos
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">
-                    Jugadores Ya Registrados
+                    Participantes Ya Registrados
                 </button>
             </li>
         </ul>
@@ -32,17 +32,17 @@
                     <div class="row">
                         <div class="col-md-6 formulario colapsable">
                             <div class="telon cerrado" id="telonFormRegistro"></div>
-                            <h2 class="text-center">Registrar Jugador</h2>
+
                             <span class="error" id="formRegError"></span>
                             <form id="formRegistro">
                                 <div class="form-group">
                                     <label for="nombre">* Nombre</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre del Jugador">
+                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre de Participante">
 
                                 </div>
                                 <div class="form-group">
                                     <label for="apellido">* Apellido</label>
-                                    <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido del Jugador">
+                                    <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido de Participante">
 
                                 </div>
                                 <div class="form-group">
@@ -65,7 +65,7 @@
                         <div id="resultadoJyP" class="col-md-6 resultado colapsable cerrado" >
                             <br><br>
                             <h2>Registro Completo</h2>
-                            <h3>ID del Jugador: <span class="spanId" id="idJugador"></span></h3>
+                            <h3>ID de Participante: <span class="spanId" id="idJugador"></span></h3>
                             <h3>ID de la Partida: <span class="spanId" id="idPartida"></span></h3>
 
                         </div>
@@ -95,38 +95,48 @@
                 <div class="container mt-5">
                     <div class="row">
                         <div class="col-md-6">
-                            <h2 class="text-center">Jugador Ya Registrado</h2>
+
+                            <span class="error" id="formRegresoError"></span>
                             <form id="formRegreso">
                                 <div class="form-group">
-                                    <label for="nombre">ID del Jugador</label>
-                                    <input type="text" class="form-control" name="idJugador" id="idJugador" placeholder="ABC12">
+                                    <label for="jugadorId">ID de Participante</label>
+                                    <input type="text" class="form-control" name="jugadorId" id="jugadorId" placeholder="ABC12">
                                 </div>
 
 
-                                <button type="submit" class="btn btn-primary btn-block">Confirmar Datos</button>
+                                <button id="btnEnviarR" type="submit" class="btn btn-primary btn-block">Confirmar Datos</button>
                             </form>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div id="datosJugador" class="col-md-6 resultado colapsable cerrado">
                             <br>
                             <table id="tblDatos">
                                 <tr>
-                                    <th>
-                                        <h3>Datos del Jugador</h3>
+                                    <th colspan="2">
+                                        <h3>Datos de Participante</h3>
                                     </th>
                                 </tr>
                                 <tr>
                                     <td class="tituloDato">Nombre:</td>
-                                    <td class="nombre"></td>
+                                    <td class="nombre">
+                                        <span id="nombreJugador"></span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="tituloDato">ID:</td>
-                                    <td class="id"></td>
+                                    <td class="id">
+                                        <span id="idJugadorR"></span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="tituloDato">Último Juego:</td>
-                                    <td class="ultimoJuego"></td>
+                                    <td class="ultimoJuego">
+                                        <span id="ultimoJuego"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
@@ -141,6 +151,8 @@
                                         >
 
                                     </td>
+                                </tr>
+                                <tr>
                                     <td colspan="2">
                                         <a
                                             name=""
@@ -148,14 +160,40 @@
                                             class="btn btn-verde"
                                             href="#"
                                             role="button"
+                                            onclick="crearPartida()"
                                             >Crear Partida con UN JUEGO AL AZAR</a
                                         >
 
                                     </td>
                                 </tr>
                             </table>
+
                         </div>
                     </div>
+
+                    <div class="row" >
+                        <div id="resultadoR" class="col-md-6 resultado colapsable cerrado" >
+                            <br><br>
+                            <h2>Registro Completo</h2>
+                            <h3>ID de Participante: <span class="spanId" id="idJugadorRF"></span></h3>
+                            <h3>ID de la Partida: <span class="spanId" id="idPartidaR"></span></h3>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <br>
+                            <a
+                                name=""
+                                id="btnReiniciar"
+                                class="btn btn-secondary btn-block"
+                                href="#"
+                                role="button"
+                                onclick="reiniciarFormRegreso()"
+                                >Reiniciar el Formulario</a
+                            >
+                        </div>
                 </div>
             </div>
         </div>

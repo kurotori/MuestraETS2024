@@ -13,7 +13,7 @@ class PartidaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function verTodas()
     {
         $partidas=Partida::with('jugador')->get();//all();
         return response()->json([
@@ -60,7 +60,7 @@ class PartidaController extends Controller
 
         $validacion=$solicitud->validate(
             [
-                'juego'=>'nullable|in:MEGAMANIA, DRAGONFIRE,ICECLIMBER,GALAGA',
+                'juego'=>'nullable|in:MEGAMANIA, DRAGONFIRE,ICECLIMBER,GALAGA,retorno',
                 //'puntaje'=>'required|integer|min:0',
                 //'estado'=>'nullable|in:abierta,jugando,cerrada',
                 'jugadorId'=>'required|max:7'
@@ -164,7 +164,7 @@ class PartidaController extends Controller
         );*/
 
         $id=$solicitud->partidaId;
-        if (strlen($id) >4 || strlen($id) >4) {
+        if (strlen($id) >4 || strlen($id) < 4) {
             return response()->
             json(
                 [
@@ -175,12 +175,9 @@ class PartidaController extends Controller
             );
         }
 
-
-
-
-        $partida = Partida::where('codigo',$id)->where('estado','abierta')->get();
+        $partida = Partida::where('codigo',$id)->where('estado','abierta')->first();
         //var_dump($partida->isEmpty());
-        if ($partida->isNotEmpty()) {
+        if ($partida) {
             // Return the item as JSON response
             return response()->json([
                 "estado"=>"OK",
@@ -196,7 +193,93 @@ class PartidaController extends Controller
 
     }
 
+    public function finalizarPartida(Request $solicitud){
+
+        /*$validacion=$solicitud->validate(
+            [
+                'partidaId'=>'required|max:4|min:4',
+                //'puntaje'=>'required|integer|min:0',
+                //'estado'=>'nullable|in:abierta,jugando,cerrada',
+                'jugadorId'=>'required|max:7'
+            ]
+        );
+
+
+        $partidaId=$validacion['partidaId'];
+        $jugadorId=$validacion['jugadorId'];
+        substr($jugadorID,3)
+        */
+        $jugadorId = substr($solicitud->jugadorId,3);
+        $partidaId = $solicitud->partidaId;
+        $puntaje = $solicitud->puntaje;
+        //return response()->json(["partida"=>"$partidaId","jugador"=>"$jugadorId"]);
+
+
+        $partida = Partida::where('codigo',$partidaId)->where('jugadorId',$jugadorId)->where('estado','abierta')->first();
+
+        if ($partida) {
+
+            $partida->estado = "cerrada";
+            $partida->puntaje = $puntaje;
+
+            $partida->save();
+
+            return response()->json(
+                [
+                    "estado"=>"OK"
+                ]
+            );
+        } else {
+            return response()->json([
+                'estado'=> 'ERROR',
+                'mensaje'=>'Partida No Encontrada'
+            ]);
+        }
+
+    }
+
+
     public function iniciarPartida(Request $solicitud){
+
+        /*$validacion=$solicitud->validate(
+            [
+                'partidaId'=>'required|max:4|min:4',
+                //'puntaje'=>'required|integer|min:0',
+                //'estado'=>'nullable|in:abierta,jugando,cerrada',
+                'jugadorId'=>'required|max:7'
+            ]
+        );
+
+
+        $partidaId=$validacion['partidaId'];
+        $jugadorId=$validacion['jugadorId'];
+        substr($jugadorID,3)
+        */
+        $jugadorId = substr($solicitud->jugadorId,3);
+        $partidaId = $solicitud->partidaId;
+        //return response()->json(["partida"=>"$partidaId","jugador"=>"$jugadorId"]);
+
+
+        $partida = Partida::where('codigo',$partidaId)->where('jugadorId',$jugadorId)->where('estado','abierta')->first();
+
+        if ($partida) {
+
+            $partida->estado = "jugando";
+            $partida->save();
+
+            return response()->json(
+                [
+                    "estado"=>"OK"
+                ]
+            );
+        } else {
+            return response()->json([
+                'estado'=> 'ERROR',
+                'mensaje'=>'Partida No Encontrada'
+            ]);
+        }
+
+
 
     }
 

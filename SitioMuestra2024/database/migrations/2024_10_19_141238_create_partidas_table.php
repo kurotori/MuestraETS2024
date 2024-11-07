@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('codigo',6);
 
             $table->enum('juego',
-                ['MEGAMANIA', 'DRAGONFIRE','ICECLIMBER','GALAGA'])
+                ['MEGAMANIA', 'DRAGONFIRE','ICECLIMBER','GALAGA','retorno'])
                 ->nullable();
 
             $table->enum('estado',
