@@ -130,7 +130,7 @@ function get_user_data {
         touch "$log_file"
             # Solicitar cada campo del nuevo registro
         idJugador=$(get_input "Hola. Ingresa tu ID")
-        if [[ -z "$apodo" ]]; then
+        if [[ -z "$idJugador" ]]; then
             mostrarAviso "Debes ingresar una ID.\nPrueba nuevamente" "ERROR" 5
         else
             idJugador=$(echo "$idJugador" | tr '[:lower:]' '[:upper:]')

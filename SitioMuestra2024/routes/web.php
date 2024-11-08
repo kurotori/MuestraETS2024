@@ -5,10 +5,11 @@ use App\Http\Controllers\PartidaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/*
 Route::get('/', function () {
     return view('welcome');
 });
-
+*/
 Route::get('/estado',
     function(){
         return response()->json([
@@ -72,3 +73,6 @@ Route::post('/probando',
         return response()->json(["dato"=>$solicitud->idJugador]);
     }
 );
+
+
+Route::redirect('/', '/muestra/registro.html', 301);

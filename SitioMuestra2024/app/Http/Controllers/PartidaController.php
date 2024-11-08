@@ -36,6 +36,7 @@ class PartidaController extends Controller
         */
         $puntajes = DB::table('partidas')
                         ->select('juego','puntaje')
+                        ->where('estado','cerrada')
                         ->selectSub(
                             function($consulta){
                                 $consulta->from('jugadores')
@@ -215,7 +216,7 @@ class PartidaController extends Controller
         //return response()->json(["partida"=>"$partidaId","jugador"=>"$jugadorId"]);
 
 
-        $partida = Partida::where('codigo',$partidaId)->where('jugadorId',$jugadorId)->where('estado','abierta')->first();
+        $partida = Partida::where('codigo',$partidaId)->where('jugadorId',$jugadorId)->where('estado','jugando')->first();
 
         if ($partida) {
 
@@ -226,7 +227,7 @@ class PartidaController extends Controller
 
             return response()->json(
                 [
-                    "estado"=>"OK"
+                    "estado"=>"OK",
                 ]
             );
         } else {
