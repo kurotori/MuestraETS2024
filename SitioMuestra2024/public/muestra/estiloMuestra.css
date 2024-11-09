@@ -1,0 +1,212 @@
+html,body{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    background-color: black;
+}
+
+/*<uniquifier>: Use a unique and descriptive class name*/
+
+.sixtyfour-convergence-font {
+  font-family: "Sixtyfour Convergence", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "BLED" 0,
+    "SCAN" 0,
+    "XELA" 0,
+    "YELA" 0;
+}
+
+
+:is(h1, h2, h3, h4, h5, h6) {
+    margin: 0px;
+}
+
+.fila{
+    position: relative;
+    width: 100%;
+}
+
+.columna{
+    position: relative;
+    float: left;
+    height: 100%;
+}
+
+#encabezado{
+    height: 25%;
+    font-family: 'Arial Black';
+}
+
+#encabezado #titulo{
+    top: 50px;
+    left: 50px;
+    font-size: x-large;
+}
+
+#contenido{
+    height: 70%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.seccion{
+    width: calc(100% - 3px);
+    height: calc(100% - 3px);
+    
+}
+
+.seccion .contenido{
+    width: calc(95% - 40px);
+    height: 90%;
+    top: 10%;
+    left: 2.5%;
+    padding-left: 40px;
+    border-top: 3px solid white;
+    border-right: 3px solid white;
+    border-top-right-radius: 20px;
+    color: white;
+    font-family: 'Arial Black';
+    font-size: 200%;
+}
+
+.seccion .titulo{
+    position: relative;
+    top: -15px;
+    background-color: #000;
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.seccion .fotoJuego{
+    position: absolute;
+    width: 33%;
+    height: 80%;
+    left: auto;
+    right: 2%;
+    top: 6%;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.seccion .datoJuego{
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 50px;
+}
+
+.seccion .infoJuego{
+    width: 50%;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 70%;
+    text-overflow: clip;
+}
+
+#pie{
+    height: 5%;
+}
+
+
+#titulo{
+    width: 75%;
+}
+
+#logo{
+    background-image: url(img/ccr_logo.png);
+    background-size: contain;
+    background-position-y: center;
+    background-repeat: no-repeat;
+    width: 25%;
+}
+
+#uno .contenido{
+    background-image: linear-gradient(to right, #000000, #000000, #000000, #000000, #000000, #1b030d, #2a0518, #390023, #580045, #6d0076, #6b00b5, #0000ff);
+    overflow: hidden;
+    
+}
+#uno .foto{
+    position: absolute;
+    width: 48%;
+    height: 100%;
+    left: 50%;
+    right: auto;
+    top: -20px;
+    transform: rotate(20deg);
+    background-image: url(img/juegostodos.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#dos .contenido{
+    background-image: linear-gradient(to right,#000,#000,#000,#000,#400,#f00);
+}
+
+#dos .fotoJuego { 
+    background-image: url(img/megamania.png);
+}
+
+#tres .contenido{
+    background-image: linear-gradient(to right,#000,#000,#000,#000,#004,#00F);
+}
+
+#tres .fotoJuego { 
+    background-image: url(img/iceclimber.png);
+}
+
+#cuatro .contenido{
+    background-image: linear-gradient(to right,#000,#000,#000,#000,#040,#0f0);
+}
+
+#cuatro .fotoJuego { 
+    background-image: url(img/dragonfire.png);
+}
+
+#cinco .contenido{
+    background-image: linear-gradient(to right,#000,#000,#000,#000,#442,#ff2);
+}
+
+#cinco .fotoJuego { 
+    background-image: url(img/galaga.png);
+}
+
+
+#seis .contenido{
+    background-image: linear-gradient(to right,#000,#000,#f00,#00f,#0f0,#ff2);
+}
+
+#seis .filaPuntos{
+    height: 41%;
+    margin-bottom: 2%;
+   
+}
+
+#seis .puntos{
+    width: 45%;
+    margin-left: 2.5%;
+    border-top: 3px solid white;
+    border-right: 3px solid white;
+    border-top-right-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #000;
+}
+
+#seis .puntos>.titulo{
+    font-size: 50%;
+    left: 20px;
+
+}
+
+#seis .puntos .listaPuntos{
+    padding-left: 20%;
+}
+
+#seis .puntos .listaPuntos li{
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+#seis .puntos .listaPuntos li:first-child::after{
+    content: '  \01F31F';
+}

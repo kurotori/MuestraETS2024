@@ -47,14 +47,14 @@ fi
 
 touch "$json_file"
 
-retroarch="../../Retroarch/RetroArch-Linux-x86_64.AppImage -f --verbose --log-file=$log_file -L "
-cores="../../Retroarch/RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/"
+retroarch="../Retroarch/RetroArch-Linux-x86_64.AppImage -f --verbose --log-file=$log_file -L "
+cores="../Retroarch/RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/"
 atari="stella2023_libretro.so "
 nes="nestopia_libretro.so "
-galaga="../../ROMs/galaga.nes"
-iceclimber="../../ROMs/iceclimber.nes"
-megamania="../../ROMs/megamania.bin"
-dragonfire="../../ROMs/dragonfire.bin"
+galaga="../ROMs/galaga.nes"
+iceclimber="../ROMs/iceclimber.nes"
+megamania="../ROMs/megamania.bin"
+dragonfire="../ROMs/dragonfire.bin"
 
 juegos=("MEGAMANIA" "DRAGONFIRE" "ICECLIMBER" "GALAGA")
 jugados=()
